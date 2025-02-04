@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/faviconstudy.jpg" type="image/x-icon" />
+    <title>School App</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #eef1f7;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .twelve h1 {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        width: 160px;
+        text-align: center;
+        margin: auto;
+        white-space: nowrap;
+        padding-bottom: 13px;
+      }
+      .twelve h1:before {
+        background-color: #c50000;
+        content: "";
+        display: block;
+        height: 3px;
+        width: 75px;
+        margin-bottom: 5px;
+      }
+      .twelve h1:after {
+        background-color: #c50000;
+        content: "";
+        display: block;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        height: 3px;
+        width: 75px;
+        margin-bottom: 0.25em;
+      }
+
+      .container {
+        max-width: 900px;
+        width: 100%;
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 15px;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        margin: 10px 0;
+        font-size: 14px;
+      }
+      button {
+        width: 100%;
+        padding: 12px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      th,
+      td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #ddd;
+      }
+      th {
+        background: #007bff;
+        color: white;
+      }
+      td {
+        background: #f9f9f9;
+      }
+      @media (max-width: 768px) {
+        body {
+          font-size: 14px;
+        }
+        h2 {
+          font-size: 18px;
+        }
+        .container {
+          padding: 15px;
+        }
+        input,
+        textarea,
+        button {
+          font-size: 14px;
+        }
+        th,
+        td {
+          font-size: 14px;
+          padding: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>~ Generate Roll Numbers ~</h2>
+
+      <label for="names">&nbsp;Enter Names :</label>
+      <input
+        type="text"
+        id="names"
+        placeholder="Enter names separated by spaces"
+      />
+      <button id="btn">Generate</button>
+      <table id="table"></table>
+
+      <h2>~ Generate Rank ~</h2>
+      <textarea
+        id="inputData"
+        placeholder="Enter student name & marks (e.g., John 85 Mary 90)..."
+      ></textarea>
+      <button onclick="processData()">Show Ranking</button>
+      <table id="resultTable">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Marks</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+    <script>
+      document.getElementById("btn").addEventListener("click", () => {
+        const dt = document.getElementById("names").value.trim();
+        if (!dt) {
+          alert("Please enter names before generating roll numbers.");
+          return;
+        }
+        const names = dt
+          .split(" ")
+          .filter((name) => name !== "")
+          .map((name) => name.charAt(0).toUpperCase() + name.slice(1))
+          .sort();
+
+        let tableContent = `<tr><th>Roll</th><th>Name</th></tr>`;
+        names.forEach((name, index) => {
+          tableContent += `<tr><td>${index + 1}</td><td>${name}</td></tr>`;
+        });
+        document.getElementById("table").innerHTML = tableContent;
+      });
+
+      function processData() {
+        const inputData = document.getElementById("inputData").value.trim();
+        if (!inputData) {
+          alert(
+            "Please enter student names and marks before showing rankings."
+          );
+          return;
+        }
+        const data = inputData.split(" ");
+        let students = [];
+        for (let i = 0; i < data.length; i += 2) {
+          students.push({ name: data[i], marks: parseInt(data[i + 1]) });
+        }
+        students.sort((a, b) => b.marks - a.marks);
+
+        let tableBodyContent = "";
+        students.forEach((student, index) => {
+          tableBodyContent += `<tr><td>${index + 1}</td><td>${
+            student.name
+          }</td><td>${student.marks}</td></tr>`;
+        });
+        document.getElementById("tableBody").innerHTML = tableBodyContent;
+      }
+    </script>
+  </body>
+</html>
